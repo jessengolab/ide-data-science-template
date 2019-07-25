@@ -9,14 +9,31 @@ trigger:
 pool:
 vmImage: 'ubuntu-latest'
 
-
 stages:
-- stage: Docker Tag and Push to Registry
+- stage: A
   jobs:
-    - job: Build and push to Azure Container Registry
-      steps:
-        displayName: 'Run a one-line script'
-          - script: echo Hello, world!
+  - job: A1
+  steps:
+  - script: echo Hello, world!
+  - script: echo Hello, world!
+  - script: echo Hello, world!
+
+- stage: B
+  dependsOn: A
+  jobs:
+  - job: B1
+  steps:
+  - script: echo Add other tasks to build, test, and deploy your project.
+  - script: echo See https://aka.ms/yaml
+
+
+# stages:
+# - stage: Docker Tag and Push to Registry
+#   jobs:
+#     - job: Build and push to Azure Container Registry
+#       steps:
+#         displayName: 'Run a one-line script'
+#           - script: echo Hello, world!
 #        steps:
 #          displayName: 'Docker Build'
 #            - script: docker build -t ${{ parameters.imageName }}:{{ parameters.version }}
@@ -25,15 +42,15 @@ stages:
 #          displayName: 'Pushing Image to Azure Registry'
 #            - script: docker push ${{ parameters.image-registry }}/${{ parameters.image-name }}:{{ parameters.version }}
 
-  - stage: Deploy to US East
-    dependsOn: Docker Tag and Push to Registry    # this stage runs after Docker Tag and Push to Registry
-    jobs:
-      - job: Deploy to Azure Kubernetes Service
-        steps:
-          displayName: 'Run a multi-line script'
-            - script: |
-              echo Add other tasks to build, test, and deploy your project.
-              echo See https://aka.ms/yaml
+  # - stage: Deploy to US East
+  #   dependsOn: Docker Tag and Push to Registry    # this stage runs after Docker Tag and Push to Registry
+  #   jobs:
+  #     - job: Deploy to Azure Kubernetes Service
+  #       steps:
+  #         displayName: 'Run a multi-line script'
+  #           - script: |
+  #             echo Add other tasks to build, test, and deploy your project.
+  #             echo See https://aka.ms/yaml
 #        steps:
 #          - template: az-pipeline-templates/deploy-to-aks.yml  # Template reference
 
