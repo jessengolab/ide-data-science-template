@@ -1,42 +1,65 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1beta1
+kind: StatefulSet
 metadata:
-  name: {{ include "vscode.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "vscode.name" . }}
-    helm.sh/chart: {{ include "vscode.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+  namespace: {{ .Values.namespace }}
+  name: "{{ .Release.Name }}"
 spec:
   replicas: {{ .Values.replicaCount }}
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "vscode.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "vscode.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        role: {{ .Release.Name }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            - name: vscode
+              containerPort: {{ .Values.deployment.vscodePort }}
+            - name: jupyter
+              containerPort: {{ .Values.deployment.jupyterPort }}
+          volumeMounts:
+            - name: {{ .Release.Name }}-code
+              mountPath: {{ .Values.deployment.codePath }}
+            - name: {{ .Release.Name }}-data
+              mountPath: {{ .Values.deployment.dataPath }}
+          resources: {}
+#      volumes:
+#      - name: code
+#        persistentVolumeClaim:
+#          claimName: code-vol
+#      - name: data
+#        persistentVolumeClaim:
+#          claimName: data-vol
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ .Release.Name }}-code
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+    - metadata:
+        name: {{ .Release.Name }}-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+#            storageClassName: rbd
+#        - metadata:
+#            name: data
+#          spec:
+#            accessModes:
+#              - ReadWriteOnce
+#            resources:
+#              requests:
+#                storage: 1Gi
+#            storageClassName: rbd
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

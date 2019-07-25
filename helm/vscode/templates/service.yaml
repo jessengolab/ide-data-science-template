@@ -1,19 +1,18 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "vscode.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "vscode.name" . }}
-    helm.sh/chart: {{ include "vscode.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+  name: "{{ .Release.Name }}"
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.service.app.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+    - port: {{ .Values.service.app.vscode.port }}
+      targetPort: {{ .Values.service.app.vscode.targetPort }}
+      name: vscode
+    - port: {{ .Values.service.app.jupyter.port }}
+      targetPort: {{ .Values.service.app.jupyter.targetPort }}
+      name: jupyternotebook
   selector:
-    app.kubernetes.io/name: {{ include "vscode.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+      role: {{ .Release.Name }}
