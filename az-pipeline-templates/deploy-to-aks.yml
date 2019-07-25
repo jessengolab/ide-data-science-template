@@ -1,0 +1,5 @@
+# File: az-pipeline-templates/deploy-to-aks.yml
+steps:
+  displayName: 'Helm'
+- script: helm --debug=true install --name=vscode --values=helm/vscode/values.yaml helm/vscode
+- script: docker tag

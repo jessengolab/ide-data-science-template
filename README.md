@@ -19,12 +19,12 @@ Completely based on [Coder's](https://coder.com/) incredible work. Their GitHub 
 
 Clone this down and rename the folder to be your project name. Modify the `environment.yml` file to include all the Python packages you need.
 
-Say you rename the folder to `ide-template` - run the following:
+Say you rename the folder to `vscode` - run the following:
 
 ```
 cd ide-template
-docker build -t ide-template .
-docker run -p 8443:8443 -p 8888:8888 -v $(pwd)/data:/data -v $(pwd)/code:/code --rm -it ide-template
+docker build -t vscode .
+docker run -p 8443:8443 -p 8888:8888 -v $(pwd)/data:/data -v $(pwd)/code:/code --rm -it vscode
 ```
 
 This will spin up the container - starting up JupyerLab and VSCode. 
@@ -45,7 +45,7 @@ You can pretty much VSCode as you would locally, doing things like starting up t
 
 #### Deploying to kubernetes
 ```
-docker build -t ide-template .
+docker build -t vscode .
 ./local-deploy
 ```
 This will spin up the your kubernetes cluster - starting up JupyerLab and VSCode. 

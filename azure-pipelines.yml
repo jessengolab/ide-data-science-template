@@ -4,16 +4,35 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+  - master
+
+pr:
+  - master
 
 pool:
   vmImage: 'ubuntu-latest'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+stages:
+  - stage: Docker Tag and Push to Registry
+    jobs:
+      - job: Build and push to Azure Container Registry
+        steps:
+          - template: az-pipeline-templates/docker-build-tag.yml  # Template reference
+
+      - job: Deploy to Azure Kubernetes Service
+        steps:
+          - template: az-pipeline-templates/deploy-to-aks.yml  # Template reference
+
+  - stage: Deploy to US East
+    dependsOn: Docker Tag and Push to Registry    # this stage runs after Test
+
+#steps:
+#    displayName: 'Run a one-line script'
+#  - script: echo Hello, world!
+#
+#
+#- script: |
+#    echo Add other tasks to build, test, and deploy your project.
+#    echo See https://aka.ms/yaml
+#  displayName: 'Run a multi-line script'
