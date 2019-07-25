@@ -43,7 +43,17 @@ You can install any extension and modify configuration like you would locally. A
 
 You can pretty much VSCode as you would locally, doing things like starting up terminals, setting Python formatters/linters, and so on.
 
-#### TODO
-- To Create Helm Charts
-- Be able to deploy in local kubernetes
+#### Deploying to kubernetes
+```
+docker build -t ide-template .
+./local-deploy
+```
+This will spin up the your kubernetes cluster - starting up JupyerLab and VSCode. 
 
+VSCode will now be running on:
+
+http://localhost:1080
+
+JupyterLab will be running on:
+
+http://localhost:1081 with the same token of `local-development`

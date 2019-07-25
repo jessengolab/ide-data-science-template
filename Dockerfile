@@ -1,8 +1,19 @@
 # the base miniconda3 image
 FROM continuumio/miniconda3:latest
 
+ENV DATA_DIR=/data
+ENV CODE_DIR=/code
+ENV APP_DIR=/ide-app
+
+RUN mkdir -p "$APP_DIR"
+
+WORKDIR "$APP_DIR"
+
+RUN mkdir -p "$DATA_DIR"
+RUN mkdir -p "$CODE_DIR"
+
 # load in the environment.yml file - this file controls what Python packages we install
-ADD environment.yml /
+ADD environment.yml "$APP_DIR"
 
 # install the Python packages we specified into the base environment
 RUN conda update -n base conda -y && conda env update
@@ -13,6 +24,8 @@ RUN wget https://github.com/codercom/code-server/releases/download/1.408-vsc1.32
 
 COPY docker-entrypoint.sh /usr/local/bin/
 
-ADD ./code /code
+
+
+VOLUME ["$(pwd)/data:$DATA_DIR", "$(pwd)/code:$CODE_DIR"]
 
 ENTRYPOINT ["docker-entrypoint.sh"]

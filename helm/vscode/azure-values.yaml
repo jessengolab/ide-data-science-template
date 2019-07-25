@@ -6,8 +6,8 @@ replicaCount: 1
 environment: local
 
 image:
-  repository: vscode
-  tag: latest
+  repository: pocregistryakscentral.azurecr.io/poc/vscode
+  tag: 0.1
   pullPolicy: IfNotPresent
 
 nameOverride: ""
