@@ -58,37 +58,3 @@ stages:
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
-
-trigger:
-  - master
-
-pr:
-  - master
-
-pool:
-  vmImage: 'ubuntu-latest'
-
-
-stages:
-  - stage: Docker Tag and Push to Registry
-    jobs:
-      - job: Build and push to Azure Container Registry
-        steps:
-          - template: az-pipeline-templates/docker-build-tag.yml  # Template reference
-
-      - job: Deploy to Azure Kubernetes Service
-        steps:
-          - template: az-pipeline-templates/deploy-to-aks.yml  # Template reference
-
-  - stage: Deploy to US East
-    dependsOn: Docker Tag and Push to Registry    # this stage runs after Test
-
-#steps:
-#    displayName: 'Run a one-line script'
-#  - script: echo Hello, world!
-#
-#
-#- script: |
-#    echo Add other tasks to build, test, and deploy your project.
-#    echo See https://aka.ms/yaml
-#  displayName: 'Run a multi-line script'
