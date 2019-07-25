@@ -48,3 +48,12 @@ You can pretty much VSCode as you would locally, doing things like starting up t
 docker build -t ide-template .
 ./local-deploy
 ```
+This will spin up the your kubernetes cluster - starting up JupyerLab and VSCode. 
+
+VSCode will now be running on:
+
+http://localhost:1080
+
+JupyterLab will be running on:
+
+http://localhost:1081 with the same token of `local-development`
