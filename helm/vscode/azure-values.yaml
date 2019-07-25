@@ -1,0 +1,36 @@
+# Default values for vscode.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+restartPolicy: Always
+replicaCount: 1
+environment: local
+
+image:
+  repository: pocregistryakscentral.azurecr.io/poc/vscode
+  tag: 0.1
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+deployment:
+  vscodePort: 1080
+  jupyterPort: 1081
+  codePath: /code
+  dataPath: /data
+
+service:
+  app:
+    type: LoadBalancer
+    vscode:
+      port: 1080
+      targetPort: 8443
+    jupyter:
+      port: 1081
+      targetPort: 8888
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

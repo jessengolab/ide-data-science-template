@@ -43,7 +43,8 @@ You can install any extension and modify configuration like you would locally. A
 
 You can pretty much VSCode as you would locally, doing things like starting up terminals, setting Python formatters/linters, and so on.
 
-#### TODO
-- To Create Helm Charts
-- Be able to deploy in local kubernetes
-
+#### Deploying to kubernetes
+```
+docker build -t ide-template .
+./local-deploy
+```
