@@ -14,18 +14,18 @@ pool:
 
 
 stages:
-  - stage: Docker Tag and Push to Registry
-    jobs:
-      - job: Build and push to Azure Container Registry
-        steps:
-          - template: az-pipeline-templates/docker-build-tag.yml  # Template reference
+- stage: Docker Tag and Push to Registry
+  jobs:
+  - job: Build and push to Azure Container Registry
+    steps:
+    - template: az-pipeline-templates/docker-build-tag.yml  # Template reference
 
-      - job: Deploy to Azure Kubernetes Service
-        steps:
-          - template: az-pipeline-templates/deploy-to-aks.yml  # Template reference
+  - job: Deploy to Azure Kubernetes Service
+    steps:
+    - template: az-pipeline-templates/deploy-to-aks.yml  # Template reference
 
-  - stage: Deploy to US East
-    dependsOn: Docker Tag and Push to Registry    # this stage runs after Test
+- stage: Deploy to US East
+  dependsOn: Docker Tag and Push to Registry    # this stage runs after Test
 
 #steps:
 #    displayName: 'Run a one-line script'
