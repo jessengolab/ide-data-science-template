@@ -3,6 +3,7 @@
 # Declare variables to be passed into your templates.
 restartPolicy: Always
 replicaCount: 1
+environment: local
 
 image:
   repository: vscode
@@ -11,6 +12,12 @@ image:
 
 nameOverride: ""
 fullnameOverride: ""
+
+deployment:
+  vscodePort: 1080
+  jupyterPort: 1081
+  codePath: /code
+  dataPath: /data
 
 service:
   app:
@@ -21,12 +28,6 @@ service:
     jupyter:
       port: 1081
       targetPort: 8888
-
-volumeMounts:
-  - name: code
-    mountPath: $(pwd)/code:/code
-  - name: data
-    mountPath: $(pwd)/data:/data
 
 nodeSelector: {}
 
