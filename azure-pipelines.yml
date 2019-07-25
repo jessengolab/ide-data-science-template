@@ -4,6 +4,45 @@
 # https://aka.ms/yaml
 
 trigger:
+- azure-pipelines
+
+pool:
+vmImage: 'ubuntu-latest'
+
+
+stages:
+- stage: Docker Tag and Push to Registry
+  jobs:
+    - job: Build and push to Azure Container Registry
+      steps:
+        displayName: 'Run a one-line script'
+          - script: echo Hello, world!
+#        steps:
+#          displayName: 'Docker Build'
+#            - script: docker build -t ${{ parameters.imageName }}:{{ parameters.version }}
+#          displayName: 'Tagging Image to push to Azure Registry'
+#            - script: docker tag ${{ parameters.imageName }}:{{ parameters.version}} ${{ parameters.image-registry }}/${{ parameters.imageName }}:{{ parameters.version }}
+#          displayName: 'Pushing Image to Azure Registry'
+#            - script: docker push ${{ parameters.image-registry }}/${{ parameters.image-name }}:{{ parameters.version }}
+
+  - stage: Deploy to US East
+    dependsOn: Docker Tag and Push to Registry    # this stage runs after Docker Tag and Push to Registry
+    jobs:
+      - job: Deploy to Azure Kubernetes Service
+        steps:
+          displayName: 'Run a multi-line script'
+            - script: |
+              echo Add other tasks to build, test, and deploy your project.
+              echo See https://aka.ms/yaml
+#        steps:
+#          - template: az-pipeline-templates/deploy-to-aks.yml  # Template reference
+
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
   - master
 
 pr:
