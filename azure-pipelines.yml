@@ -9,15 +9,15 @@ trigger:
 stages: # this line throws an error and i can't figure out why
 - stage: Docker Tag and Push to Registry
   jobs:
-  - job: Build and push to Azure Container Registry
+  - job: Build
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - template: az-pipeline-templates/docker-build-tag.yml  # Template reference
-- stage: Deploy to US East
-  dependsOn: Docker Tag and Push to Registry    # this stage runs after Docker Tag and Push to Registry
-  - job: Deploy to Azure Kubernetes Service
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - template: az-pipeline-templates/deploy-to-aks.yml  # Template reference
+    - template: az-pipeline-templates/docker-build-tag.yml
+# - stage: Deploy to US East
+#   dependsOn: Docker Tag and Push to Registry    # this stage runs after Docker Tag and Push to Registry
+#   - job: Deploy to Azure Kubernetes Service
+#     pool:
+#       vmImage: 'ubuntu-latest'
+#     steps:
+#     - template: az-pipeline-templates/deploy-to-aks.yml  # Template reference
