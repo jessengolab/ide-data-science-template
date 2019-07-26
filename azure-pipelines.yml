@@ -6,18 +6,18 @@
 trigger:
 - master
 
-
-
-
-jobs:
-- job: A
-pool:
-  vmImage: 'ubuntu-latest'
-  steps:
-  - bash: echo "A"
-
-- job: B
-pool:
-  vmImage: 'ubuntu-latest'
-  steps:
-  - bash: echo "B"
+stages: # this line throws an error and i can't figure out why
+- stage: Docker Tag and Push to Registry
+  jobs:
+  - job: Build and push to Azure Container Registry
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - template: az-pipeline-templates/docker-build-tag.yml  # Template reference
+- stage: Deploy to US East
+  dependsOn: Docker Tag and Push to Registry    # this stage runs after Docker Tag and Push to Registry
+  - job: Deploy to Azure Kubernetes Service
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - template: az-pipeline-templates/deploy-to-aks.yml  # Template reference
