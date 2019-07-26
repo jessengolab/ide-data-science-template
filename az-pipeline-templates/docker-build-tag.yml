@@ -1,6 +1,5 @@
 # File: az-pipeline-templates/docker-build-tag.yml
 steps:
-displayName: 'Docker Build'
 - script: docker build -t %DOCKER_IMAGE_NAME%:%SNAPSHOT_DEPENDENCY_VERSION% .
   # displayName: 'Tagging Image to push to Azure Registry'
 # - script: docker tag ${{ parameters.imageName }}:{{ parameters.version}} ${{ parameters.image-registry }}/${{ parameters.imageName }}:{{ parameters.version }}
