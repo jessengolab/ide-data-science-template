@@ -7,7 +7,7 @@ trigger:
 - master
 
 stages: # this line throws an error and i can't figure out why
-- stage: Docker Tag and Push to Registry
+- stage: Docker_Tag_and_Push_to_Registry
   jobs:
   - job: Build
     pool:
